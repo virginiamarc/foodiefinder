@@ -1,0 +1,110 @@
+import { useState } from "react";
+import SearchBar from "./components/SearchBar";
+import RecipeList from "./components/RecipeList";
+import "./App.css";
+
+function App() {
+  const [recipes, setRecipes] = useState([]);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  // Fetch recipes from TheMealDB
+  const handleSearch = async (searchTerm) => {
+    if (!searchTerm) return setRecipes([]);
+
+    try {
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`
+      );
+      const data = await res.json();
+      setRecipes(data.meals || []);
+    } catch (err) {
+      console.error("Error fetching recipes:", err);
+    }
+  };
+
+  const handleCardClick = (recipe) => setSelectedRecipe(recipe);
+  const closeModal = () => setSelectedRecipe(null);
+
+  // Extract ingredients and measurements
+  const getIngredients = (recipe) => {
+    const ingredients = [];
+    for (let i = 1; i <= 20; i++) {
+      const ingredient = recipe[`strIngredient${i}`]?.trim();
+      const measure = recipe[`strMeasure${i}`]?.trim();
+      if (ingredient) {
+        ingredients.push(measure ? `${ingredient} - ${measure}` : ingredient);
+      }
+    }
+    return ingredients;
+  };
+
+  // Extract YouTube embed URL
+  const getYoutubeEmbed = (url) => {
+    if (!url) return null;
+    const videoId = url.split("v=")[1]?.split("&")[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  };
+
+  // Compute ingredients once for the modal
+  const ingredients = selectedRecipe ? getIngredients(selectedRecipe) : [];
+
+  return (
+    <div className="app-container">
+      <header>
+        <h1>FoodieFinder</h1>
+        <p>Discover, Cook, Enjoy!</p>
+      </header>
+
+      <main>
+        <SearchBar onSearch={handleSearch} />
+        <RecipeList recipes={recipes} onCardClick={handleCardClick} />
+      </main>
+
+      {/* Modal */}
+      {selectedRecipe && (
+        <div className="modal" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>{selectedRecipe.strMeal}</h2>
+            <img
+              src={selectedRecipe.strMealThumb}
+              alt={selectedRecipe.strMeal}
+            />
+
+            <h3>Ingredients</h3>
+            {ingredients.length > 0 ? (
+              <ul>
+                {ingredients.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No ingredients found.</p>
+            )}
+
+            <h3>Instructions</h3>
+            <p>{selectedRecipe.strInstructions}</p>
+
+            {selectedRecipe.strYoutube && (
+              <div className="youtube-video">
+                <h3>Video Tutorial</h3>
+                <iframe
+                  width="100%"
+                  height="315"
+                  src={getYoutubeEmbed(selectedRecipe.strYoutube)}
+                  title={selectedRecipe.strMeal}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
+
+            <button onClick={closeModal}>Close</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
