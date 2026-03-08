@@ -66,6 +66,7 @@ main {
   font-weight: 700;
   font-size: 3.6rem;
   margin-top: 0;
+  margin-bottom: 2px; /* tighten spacing */
   letter-spacing: 0.5px;
 }
 
@@ -75,12 +76,14 @@ main {
   font-weight: 400;
   color: #555;
   margin-top: 8px;
-  margin-bottom: -8px; /* tighten spacing */
+  margin-bottom: -10px; /* tighten spacing */
+  margin-top: 0;
   letter-spacing: 0.3px;
 }
 
 .hero-subtext {
   font-family: 'Poppins', sans-serif; /* or whatever font you want */
+  font-style: italic;
   font-size: 1.2rem;
   color: #555;
   letter-spacing: 0.3px;
@@ -238,14 +241,13 @@ form.search-form button:hover {
 .recipe-card ul {
   list-style-type: disc;
   padding-left: 20px;
-  margin: 10px;
+  margin: 10px 0;
   display: block;
 }
 
-.recipe-card ul,
 .recipe-card li {
   text-align: left;
-  padding-left: 15px;
+  padding-left: 0;
   margin-left: 0;
 }
 
@@ -299,6 +301,7 @@ form.search-form button:hover {
   color: #ff6f61;
   margin-bottom: 10px;
   text-align: center;
+  font-family: "DM Serif Display", sans-serif;
 }
 
 .modal-content h3 {
@@ -306,6 +309,7 @@ form.search-form button:hover {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
+  font-family: "Poppins", sans-serif;
 }
 
 .modal-content ul {
@@ -342,6 +346,8 @@ form.search-form button:hover {
   margin-top: 15px;
   padding: 10px 20px;
   background-color: #ff6f61;
+  font-family: "DM Serif Display", sans-serif;
+  font-size: 1.3rem;
   color: white;
   border: none;
   border-radius: 8px;
@@ -392,6 +398,24 @@ form.search-form button:hover {
     text-align: left;
     padding-left: 15px;
     margin-bottom: 8px;
+  }
+
+  .modal-content h2 {
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 1.8rem;
+  }
+
+  .modal-content h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.2rem;
+  }
+
+  .modal-content button {
+    font-family: "DM Serif Display", sans-serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    padding: 8px 16px;
   }
 }
 
