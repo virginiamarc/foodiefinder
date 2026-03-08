@@ -359,3 +359,66 @@ form.search-form button:hover {
   font-size: 0.9rem;
   color: #777;
 }
+
+/* ============================
+   INGREDIENT LIST WITH ICONS
+   ============================ */
+
+.ingredient-list {
+  margin: 20px 0;
+  padding-left: 0 !important;
+}
+
+.ingredient-list li {
+  list-style: none;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #444;
+  position: relative;
+  padding-left: 36px;
+}
+
+.ingredient-list li::before {
+  content: "🥄 "; /* change to any icon you like */
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.1rem;
+}
+
+/* ============================
+   FORMATTED INSTRUCTION STEPS
+   ============================ */
+
+.instruction-list {
+  margin: 20px 0;
+  padding-left: 0 !important; /* override modal UL padding */
+  counter-reset: step-counter;
+}
+
+.instruction-list li {
+  list-style: none;
+  margin-bottom: 14px;
+  line-height: 1.6;
+  color: #333;
+  position: relative;
+  padding-left: 52px; /* enough room for icon + number */
+  counter-increment: step-counter;
+}
+
+.instruction-list li::before {
+  content: counter(step-counter) ". ";
+  position: absolute;
+  left: 32px;
+  top: 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* The Category icon */
+.step-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.4rem;
+}

@@ -3,6 +3,7 @@ import SearchBar from "./components/SearchBar";
 import RecipeList from "./components/RecipeList";
 import "./App.css";
 import logo from "./assets/logo.png";
+import { categoryIcons } from "./utils/categoryIcons";
 
 function App() {
   const [recipes, setRecipes] = useState([]);
@@ -63,8 +64,53 @@ function App() {
     return `https://www.youtube.com/embed/${videoId}`;
   };
 
+  const formatInstructions = (text) => {
+    if (!text) return [];
+
+    // Split into lines, trim, remove empties
+    const lines = text
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    const steps = [];
+    let buffer = "";
+
+    lines.forEach(line => {
+      const isStepHeader = /^step\s*\d+[:\-]*/i.test(line);
+
+      if (isStepHeader) {
+        // If we already have content, push it
+        if (buffer) {
+          steps.push(buffer.trim());
+          buffer = "";
+        }
+        // Skip the literal "Step X" text entirely
+        return;
+      }
+
+      // If the line is long, treat it as a full step
+      if (line.length > 120) {
+        if (buffer) {
+          steps.push(buffer.trim());
+          buffer = "";
+        }
+        steps.push(line);
+        return;
+      }
+
+      // Otherwise, merge short lines into a single step
+      buffer += (buffer ? " " : "") + line;
+    });
+
+    if (buffer) steps.push(buffer.trim());
+
+    return steps;
+  };
+
   // Compute ingredients once for the modal
   const ingredients = selectedRecipe ? getIngredients(selectedRecipe) : [];
+
 
   return (
     <div className="app-container">
@@ -104,14 +150,23 @@ function App() {
             />
 
             <h3>Ingredients</h3>
-            <ul>
+            <ul className="ingredient-list">
               {ingredients.map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
             </ul>
 
             <h3>Instructions</h3>
-            <p>{selectedRecipe.strInstructions}</p>
+            <ul className="instruction-list">
+              {formatInstructions(selectedRecipe.strInstructions).map((step, index) => (
+                <li key={index}>
+                  <span className="step-icon">
+                    {categoryIcons[selectedRecipe.strCategory] || "🍽️"}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ul>
 
             {selectedRecipe.strYoutube && (
               <div className="youtube-video">
