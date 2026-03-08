@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import RecipeList from "./components/RecipeList";
 import "./App.css";
@@ -10,6 +10,24 @@ function App() {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [featuredRecipe, setFeaturedRecipe] = useState(null);
+
+  useEffect(() => {
+    // Fetch a random recipe on initial load for the hero section
+    const fetchRandomMeal = async () => {
+      try {
+        const res = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+        const data = await res.json();
+        if (data.meals) {
+          setFeaturedRecipe(data.meals[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching featured recipe:", err);
+      }
+    };
+
+    fetchRandomMeal();
+  }, []);
 
   // Fetch recipes from TheMealDB
   const handleSearch = async (searchTerm) => {
@@ -134,7 +152,6 @@ function App() {
   // Compute ingredients once for the modal
   const ingredients = selectedRecipe ? getIngredients(selectedRecipe) : [];
 
-
   return (
     <div className="app-container">
 
@@ -146,6 +163,18 @@ function App() {
             <h1>FoodieFinder</h1>
             <p>Discover, Cook, Enjoy!</p>
           </header>
+
+          {/* Featured Recipe Section */}
+          {featuredRecipe && !recipes.length && (
+            <div className="featured-meal" onClick={() => setSelectedRecipe(featuredRecipe)}>
+              <img 
+                src={featuredRecipe.strMealThumb} 
+                alt={featuredRecipe.strMeal} 
+                className="featured-img" 
+              />
+              <h2 className="featured-title">{featuredRecipe.strMeal}</h2>
+            </div>
+          )}
 
           <SearchBar onSearch={handleSearch} />
           {loading && <p className="loading">Loading recipes...</p>}
