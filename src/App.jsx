@@ -7,19 +7,36 @@ import logo from "./assets/logo.png";
 function App() {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Fetch recipes from TheMealDB
   const handleSearch = async (searchTerm) => {
-    if (!searchTerm) return setRecipes([]);
+    if (!searchTerm) {
+      setRecipes([]);
+      return;
+    }
+
+    setLoading(true); // start loading
+    setError(null); // clear previous errors
 
     try {
       const res = await fetch(
         `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`
       );
       const data = await res.json();
-      setRecipes(data.meals || []);
+
+      if (!data.meals) {
+        setRecipes([]);
+        setError("No recipes found. Try a different search term.");
+      } else {
+        setRecipes(data.meals);
+      }
     } catch (err) {
       console.error("Error fetching recipes:", err);
+      setError("An error occurred while fetching recipes. Please try again.");
+    } finally {
+      setLoading(false); // end loading
     }
   };
 
@@ -51,15 +68,28 @@ function App() {
 
   return (
     <div className="app-container">
-      <header>
-        <img src={logo} alt="FoodieFinder Logo" className="logo" />
-        <h1>FoodieFinder</h1>
-        <p>Discover, Cook, Enjoy!</p>
-      </header>
 
       <main>
-        <SearchBar onSearch={handleSearch} />
-        <RecipeList recipes={recipes} onCardClick={handleCardClick} />
+        <div className="main-content">
+
+          <header className="hero">
+            <img src={logo} alt="FoodieFinder Logo" className="logo" />
+            <h1>FoodieFinder</h1>
+            <p>Discover, Cook, Enjoy!</p>
+          </header>
+
+          <SearchBar onSearch={handleSearch} />
+          {loading && <p className="loading">Loading recipes...</p>}
+          {error && <p className="error">{error}</p>}
+          {!loading && !error && recipes.length > 0 && (
+            <>
+              <p className="recipe-count">
+                {recipes.length} {recipes.length === 1 ? "recipe" : "recipes"} found
+              </p>
+              <RecipeList recipes={recipes} onCardClick={handleCardClick} />
+            </>
+          )}
+        </div>
       </main>
 
       {/* Modal */}
@@ -95,7 +125,7 @@ function App() {
                   allowFullScreen
                 ></iframe>
               </div>
-            )}
+            )} 
 
             <button onClick={closeModal}>Close</button>
           </div>

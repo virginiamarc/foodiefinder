@@ -5,14 +5,14 @@ function RecipeList({ recipes, onCardClick }) {
 
   return (
     <div className="recipe-list">
-      {recipes.map((recipe) => (
-        <RecipeCard
-          key={recipe.idMeal}
-          title={recipe.strMeal}
-          image={recipe.strMealThumb}
-          onClick={() => onCardClick(recipe)} // pass the recipe data on click
-        />
-      ))}
+        {recipes.map((recipe) => (
+            <RecipeCard
+                key={recipe.idMeal}
+                title={recipe.strMeal}
+                image={recipe.strMealThumb}
+                onClick={() => onCardClick(recipe)} // pass the recipe data on click/>
+            />
+        ))}
     </div>
   );
 }

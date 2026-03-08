@@ -1,17 +1,10 @@
 import React from "react";
 
-function RecipeCard({ title, image, onClick }) {
+
+function RecipeCard({ title, image, ingredients = [], onClick }) {
   return (
-    <div className="recipe-card"
-      onClick={onClick}
-      style={{
-        border: "1px solid #ccc",
-        padding: "10px",
-        width: "200px",
-        cursor: "pointer",
-      }}
-    >
-      <img src={image} alt={title} style={{ width: "100%" }} />
+    <div className="recipe-card" onClick={onClick}>
+      <img src={image} alt={title} />
       <h3>{title}</h3>
     </div>
   );

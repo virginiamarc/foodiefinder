@@ -1,6 +1,9 @@
-/* App.css - FoodieFinder Styling */
+/* ===========================
+   App.css - FoodieFinder Styling
+   Centered Layout Version
+   =========================== */
 
-/* Reset and center the app */
+/* Reset and base styling */
 html, body, #root {
   min-height: 100%;
   margin: 0;
@@ -9,11 +12,51 @@ html, body, #root {
   background-color: #f7f7f7;
 }
 
-/* App container */
+/* App container - overall page */
 .app-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers all children horizontally */
+  text-align: center;
   padding: 20px;
+  min-height: 100vh;
+  background-color: #fefefe;
+  margin: 0 auto; /* centers the app container */
+}
+
+/* Main wrapper for content */
+main {
+  display: flex;
+  justify-content: center; /* centers .main-content */
+  align-items: center; /* centers .main-content vertically if needed */
+  width: 100%;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers children horizontally */
+  width: 100%;
+  max-width: 900px;    /* limits content width */
+  padding: 0 15px;     /* small padding for mobile */
+  box-sizing: border-box;
+  margin: 0 auto; /* centers the main content */
+}
+
+/* Force form, messages, and recipe list to be full width */
+.main-content > * {
+  width: auto; /* default to auto for centering */
+  max-width: 100%; /* ensure they don't exceed container */
+}
+
+/* Hero section (logo and header) */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 25px;
+  width: 100%;
 }
 
 .logo {
@@ -21,27 +64,18 @@ html, body, #root {
   height: auto;
   margin-bottom: 15px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-/* Responsive adjustments for Larger screens */
 @media (min-width: 768px) {
   .logo {
-    width: 200px; /* bigger on tablet/desktops */
+    width: 200px;
   }
 }
 
 @media (min-width: 1200px) {
   .logo {
-    width: 250px; /* even bigger on Large screens */
+    width: 250px;
   }
-}
-
-/* Header styling */
-header {
-  text-align: center;
-  margin-bottom: 30px;
 }
 
 header h1 {
@@ -55,17 +89,19 @@ header p {
   color: #555;
 }
 
-/* Search bar styling */
+/* ======================
+   Search Bar Styling
+   ====================== */
 form.search-form {
   display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
+  justify-content: center; /* centers input + button */
   gap: 10px;
+  margin-bottom: 30px;
 }
 
 form.search-form input {
-  flex: 1;
-  max-width: 300px;
+  width: 250px;       /* fixed width for centering */
+  max-width: 100%;    /* responsive on small screens */
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 8px 0 0 8px;
@@ -87,12 +123,38 @@ form.search-form button:hover {
   background-color: #ff4c3b;
 }
 
+/* Recipe count and messages */
+.recipe-count,
+.loading,
+.error {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.recipe-count {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #2c7a7b;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Recipe list container */
 .recipe-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center; /* centers recipe cards */
   gap: 20px;
-  justify-content: center;
 }
 
 /* Recipe card */
@@ -104,7 +166,8 @@ form.search-form button:hover {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 220px;
-  text-align: center;
+  text-align: left;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   height: auto;
@@ -125,6 +188,29 @@ form.search-form button:hover {
   padding: 10px;
   font-size: 1.1rem;
   color: #333;
+  text-align: center;
+}
+
+.recipe-card ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 10px;
+  display: block;
+}
+
+.recipe-card ul,
+.recipe-card li {
+  text-align: left;
+  padding-left: 15px;
+  margin-left: 0;
+}
+
+.recipe-card p {
+  text-align: left;
+  padding: 10px;
+  font-size: 0.9rem;
+  color: #555;
+  flex-grow: 1; /* push content to fill card height */
 }
 
 /* Modal */
@@ -134,27 +220,29 @@ form.search-form button:hover {
   left: 0;
   width: 100%;
   height: 100%;
+  min-height: 0; /* allow shrinking on mobile */
   background-color: rgba(0,0,0,0.6);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 20px;
   overflow-y: auto; /* scroll if content is taller than screen */
   -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
-  z-index: 1000;
 }
 
 .modal-content {
   background-color: white;
+  text-align: left;
   padding: 20px;
   width: 90%;
   max-width: 600px;
-  height: auto;       /* let content determine height */
-  max-height: none;   /* remove restrictions */
+  max-height: 90vh; /* limit height to viewport */
+  min-height: 0; /* allow shrinking */
+  overflow-y: auto; /* scroll if content exceeds max-height */
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
 }
 
 .modal-content img {
@@ -166,12 +254,29 @@ form.search-form button:hover {
 .modal-content h2 {
   color: #ff6f61;
   margin-bottom: 10px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  color: #2c7a7b;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .modal-content ul {
+  display: block;
+  overflow: visible;
   list-style-type: disc;
-  padding-left: 20px;
-  margin-bottom: 15px;
+  padding-left: 30px;
+  margin-bottom: 10px;
+}
+
+.modal-content li {
+  text-align: left;
+  padding-left: 15px;
+  margin-bottom: 8px;
+  color: #555 !important;
 }
 
 .modal-content p {
@@ -210,11 +315,19 @@ form.search-form button:hover {
   .recipe-card {
     width: 90%;
     margin: 0 auto;
+    overflow: visible; /* allow content to expand on small screens */
+  }
+
+  .recipe-card ul {
+    display: block;
+    overflow: visible; /* show full list on small screens */
+    text-align: left;
   }
 
   .modal-content {
-    width: 95%;
-    padding: 15px;
+    max-height: 85vh; /* slightly less height on small screens */
+    overflow-y: auto; /* ensure scroll on small screens */
+    overflow-x: hidden;
   }
 
   .modal-content img {
@@ -223,7 +336,17 @@ form.search-form button:hover {
   }
 
   .modal-content ul {
+    display: block; /* REQUIRED on mobile Safari */
+    overflow: visible; /* prevent clipping of list items */
+    list-style-type: disc; /* keeps bullets visible */
     padding-left: 15px;
     margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .modal-content li {
+    text-align: left;
+    padding-left: 15px;
+    margin-bottom: 8px;
   }
 }
