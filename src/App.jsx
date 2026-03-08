@@ -2,6 +2,7 @@ import { useState } from "react";
 import SearchBar from "./components/SearchBar";
 import RecipeList from "./components/RecipeList";
 import "./App.css";
+import logo from "./assets/logo.png";
 
 function App() {
   const [recipes, setRecipes] = useState([]);
@@ -51,6 +52,7 @@ function App() {
   return (
     <div className="app-container">
       <header>
+        <img src={logo} alt="FoodieFinder Logo" className="logo" />
         <h1>FoodieFinder</h1>
         <p>Discover, Cook, Enjoy!</p>
       </header>
@@ -65,21 +67,18 @@ function App() {
         <div className="modal" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>{selectedRecipe.strMeal}</h2>
+
             <img
               src={selectedRecipe.strMealThumb}
               alt={selectedRecipe.strMeal}
             />
 
             <h3>Ingredients</h3>
-            {ingredients.length > 0 ? (
-              <ul>
-                {ingredients.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>No ingredients found.</p>
-            )}
+            <ul>
+              {ingredients.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
 
             <h3>Instructions</h3>
             <p>{selectedRecipe.strInstructions}</p>
@@ -93,7 +92,6 @@ function App() {
                   src={getYoutubeEmbed(selectedRecipe.strYoutube)}
                   title={selectedRecipe.strMeal}
                   frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               </div>

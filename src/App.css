@@ -16,6 +16,28 @@ html, body, #root {
   padding: 20px;
 }
 
+.logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive adjustments for Larger screens */
+@media (min-width: 768px) {
+  .logo {
+    width: 200px; /* bigger on tablet/desktops */
+  }
+}
+
+@media (min-width: 1200px) {
+  .logo {
+    width: 250px; /* even bigger on Large screens */
+  }
+}
+
 /* Header styling */
 header {
   text-align: center;
