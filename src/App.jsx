@@ -131,6 +131,9 @@ function App() {
           </div>
         </div>
       )}
+      <footer className="footer">
+        © {new Date().getFullYear()} Virginia Marc
+      </footer>
     </div>
   );
 }

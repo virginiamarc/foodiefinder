@@ -22,6 +22,7 @@ html, body, #root {
   min-height: 100vh;
   background-color: #fefefe;
   margin: 0 auto; /* centers the app container */
+  justify-content: space-between; /* space out header, main, and footer */
 }
 
 /* Main wrapper for content */
@@ -349,4 +350,12 @@ form.search-form button:hover {
     padding-left: 15px;
     margin-bottom: 8px;
   }
+}
+
+.footer {
+  margin-top: auto;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
 }
