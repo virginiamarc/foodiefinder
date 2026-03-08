@@ -64,19 +64,27 @@ function App() {
     return `https://www.youtube.com/embed/${videoId}`;
   };
 
+  const isYouTubeEmbeddable = (url) => {
+    if (!url) return false;
+    const videoId = url.split("v=")[1]?.split("&")[0];
+    return !!videoId; // simple check for valid video ID
+  }
+
   const formatInstructions = (text) => {
     if (!text) return [];
 
-    // Split into lines, trim, remove empties
-    const lines = text
-      .split(/\r?\n/)
-      .map(line => line.trim())
-      .filter(line => line.length > 0);
+    // Split into sentences
+    const sentences = text
+      .split(/(?<=[.!?])\s+/)
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
 
-    const steps = [];
+    const steps = []; 
     let buffer = "";
 
-    lines.forEach(line => {
+    sentences.forEach(line => {
+      //Remove leading numbers like "1. "
+      line = line.replace(/^\d+\.\s*/, "");
       const isStepHeader = /^step\s*\d+[:\-]*/i.test(line);
 
       if (isStepHeader) {
@@ -107,6 +115,21 @@ function App() {
 
     return steps;
   };
+
+  const getIcon = (recipe) => {
+    const name = recipe.strMeal.toLowerCase();
+    
+    // Keyword-based overrides
+    if (name.includes("cookie")) return "🍪";
+    if (name.includes("ice cream")) return "🍨";
+    if (name.includes("pancake")) return "🥞";
+    if (name.includes("brownie")) return "🍫";
+    if (name.includes("donut") || name.includes("doughnut")) return "🍩";
+
+    // Default to category icon
+    return categoryIcons[recipe.strCategory] || "🍽️";
+  };
+
 
   // Compute ingredients once for the modal
   const ingredients = selectedRecipe ? getIngredients(selectedRecipe) : [];
@@ -161,7 +184,7 @@ function App() {
               {formatInstructions(selectedRecipe.strInstructions).map((step, index) => (
                 <li key={index}>
                   <span className="step-icon">
-                    {categoryIcons[selectedRecipe.strCategory] || "🍽️"}
+                    {getIcon(selectedRecipe)}
                   </span>
                   {step}
                 </li>
@@ -171,16 +194,47 @@ function App() {
             {selectedRecipe.strYoutube && (
               <div className="youtube-video">
                 <h3>Video Tutorial</h3>
+                
+                {/* Try to embed the video */}
                 <iframe
+                  id="yt-frame"
                   width="100%"
                   height="315"
                   src={getYoutubeEmbed(selectedRecipe.strYoutube)}
                   title={selectedRecipe.strMeal}
                   frameBorder="0"
                   allowFullScreen
+                  onError={(e) => {
+                    // Give YouTube a moment to render its overlay
+                    setTimeout(() => {
+                      const iframe = document.getElementById("yt-frame");
+
+                      // If You// If YouTube blocks the video, the iframe height collapses or overlays appear
+                      if (
+                        iframe &&
+                        (iframe.contentWindow === null || iframe.clientHeight < 200)
+                      ) {
+                        iframe.style.display = "none";
+                        const fallback = document.getElementById("yt-fallback");
+                        if (fallback) fallback.style.display = "block";
+                      }
+                    }, 500);
+                  }}
                 ></iframe>
+
+                {/* Fallback button */}
+                <a
+                  id="yt-fallback"
+                  href={selectedRecipe.strYoutube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="youtube-button"
+                  style={{ display: "none" }}
+                >
+                  Watch on YouTube
+                </a>
               </div>
-            )} 
+            )}
 
             <button onClick={closeModal}>Close</button>
           </div>
