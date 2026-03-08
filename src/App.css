@@ -65,6 +65,7 @@ main {
   font-style: italic;
   font-weight: 700;
   font-size: 3.6rem;
+  margin-top: 0;
   letter-spacing: 0.5px;
 }
 
@@ -74,13 +75,28 @@ main {
   font-weight: 400;
   color: #555;
   margin-top: 8px;
+  margin-bottom: -8px; /* tighten spacing */
   letter-spacing: 0.3px;
+}
+
+.hero-subtext {
+  font-family: 'Poppins', sans-serif; /* or whatever font you want */
+  font-size: 1.2rem;
+  color: #555;
+  letter-spacing: 0.3px;
+}
+
+.spoon-icon {
+  width: 40px;
+  height: auto;
+  margin-left: -15px; /* adjust as needed to align with text */
+  vertical-align: middle;
 }
 
 .logo {
   width: 250px;
   height: auto;
-  margin-bottom: 15px;
+  margin-bottom: 4px;
   display: block;
 }
 
@@ -476,6 +492,8 @@ form.search-form button:hover {
   max-width: 350px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-top: -5px;
+  margin-bottom: 0px; /* tighten spacing */
 }
 
 .featured-title {

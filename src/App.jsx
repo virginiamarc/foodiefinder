@@ -3,6 +3,7 @@ import SearchBar from "./components/SearchBar";
 import RecipeList from "./components/RecipeList";
 import "./App.css";
 import logo from "./assets/logo.png";
+import spoon from "./assets/spoon.png"; // adjust path as needed
 import { categoryIcons } from "./utils/categoryIcons";
 
 function App() {
@@ -161,7 +162,9 @@ function App() {
           <header className="hero">
             <img src={logo} alt="FoodieFinder Logo" className="logo" />
             <h1>FoodieFinder</h1>
-            <p>Discover, Cook, Enjoy!</p>
+            <p className="hero-subtext">
+              Discover, Cook, Enjoy <img src={spoon} alt="wooden spoon icon" className="spoon-icon" />
+            </p>
           </header>
 
           {/* Featured Recipe Section */}
